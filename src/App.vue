@@ -1,17 +1,16 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <simple-flowchart msg="Welcome to Your Vue.js App"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import SimpleFlowchart from './components/SimpleFlowchart.vue'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    SimpleFlowchart
   }
 }
 </script>
