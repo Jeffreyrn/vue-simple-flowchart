@@ -1,6 +1,14 @@
 <template>
   <div id="app">
-    <div> simple flowchart</div>
+    <h1> simple flowchart</h1>
+    <div class="tool-wrapper">
+      <select v-model="newNodeType">
+        <option v-for="(item, index) in nodeCategory" :key="index" :value="index">{{item}}</option>
+      </select>
+      <input type="text" v-model="newNodeLabel" placeholder="Input node label">
+      <button @click="addNode">ADD</button>
+    </div>
+    
     <simple-flowchart :scene.sync="scene"/>
   </div>
 </template>
@@ -49,14 +57,38 @@ export default {
             to: 4,  // node id the link end
           }
         ]
-      }
-      
+      },
+      newNodeType: 0,
+      newNodeLabel: '',
+      nodeCategory:[
+        '规则',
+        '知识包',
+        '动作',
+        '脚本',
+        '决策',
+        '分支',
+        '聚合',
+      ],
+    }
+  },
+  methods: {
+    addNode() {
+      let maxID = Math.max(0, ...this.scene.nodes.map((link) => {
+        return link.id
+      }))
+      this.scene.nodes.push({
+        id: maxID + 1,
+        x: -400,
+        y: 50,
+        type: this.nodeCategory[this.newNodeType],
+        label: this.newNodeLabel ? this.newNodeLabel: `test${maxID + 1}`,
+      })
     }
   }
 }
 </script>
 
-<style>
+<style lang="scss">
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -64,5 +96,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin: 0;
+  .tool-wrapper {
+    position: relative;
+  }
 }
 </style>

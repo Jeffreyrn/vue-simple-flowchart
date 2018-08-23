@@ -52,6 +52,10 @@ export default {
         lastY: 0,
       },
       draggingLink: null,
+      rootDivOffset: {
+        top: 0,
+        left: 0
+      },
     };
   },
   components: {
@@ -64,6 +68,8 @@ export default {
         centerY: this.scene.centerY,
         centerX: this.scene.centerX,
         scale: this.scene.scale,
+        offsetTop: this.rootDivOffset.top,
+        offsetLeft: this.rootDivOffset.left,
       }
     },
     lines() {
@@ -93,6 +99,11 @@ export default {
       return lines;
     }
   },
+  mounted() {
+    this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
+    this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
+    console.log(22222, this.rootDivOffset)
+  },
   methods: {
     calculateDFromPosition(cx, cy, ex, ey) {
       let x1 = cx,
@@ -110,10 +121,10 @@ export default {
     },
     getPortPosition(type, x, y) {
       if (type === 'top') {
-        return [x + 34, y - 20];
+        return [x + 40, y];
       }
       else if (type === 'bottom') {
-        return [x + 34, y + 60];
+        return [x + 40, y + 80];
       }
     },
     linkingStart(index) {
@@ -126,16 +137,18 @@ export default {
       console.log(index)
     },
     linkingStop(index) {
-      let maxID = Math.max(0, ...this.scene.links.map((link) => {
-        return link.id
-      }))
-      this.scene.links.push({
-        id: maxID + 1,
-        from: this.draggingLink.from,
-        to: index,
-      })
-      this.draggingLink = null
-      console.log('inner')
+      if (this.draggingLink) {
+        let maxID = Math.max(0, ...this.scene.links.map((link) => {
+          return link.id
+        }))
+        this.scene.links.push({
+          id: maxID + 1,
+          from: this.draggingLink.from,
+          to: index,
+        })
+        this.draggingLink = null
+        console.log('inner')
+      }
     },
     linkingBreak(id) {
       if (this.scene.links.length > 0) {
@@ -168,6 +181,7 @@ export default {
     handleUp(e) {
       console.log('outer')
       const target = e.target || e.srcElement;
+      console.log('111111111', this.$el.offsetTop)
       console.log(target.className, this.$el.contains)
       if (this.$el.contains(target) && (typeof target.className !== 'string' || target.className.indexOf('node-input') < 0)) {
         this.draggingLink = null;
