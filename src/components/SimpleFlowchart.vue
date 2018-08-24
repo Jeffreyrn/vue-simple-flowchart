@@ -147,7 +147,6 @@ export default {
           to: index,
         })
         this.draggingLink = null
-        console.log('inner')
       }
     },
     linkingBreak(id) {
@@ -179,10 +178,7 @@ export default {
       }
     },
     handleUp(e) {
-      console.log('outer')
       const target = e.target || e.srcElement;
-      console.log('111111111', this.$el.offsetTop)
-      console.log(target.className, this.$el.contains)
       if (this.$el.contains(target)) {
         if (typeof target.className !== 'string' || target.className.indexOf('node-input') < 0) {
           this.draggingLink = null;
