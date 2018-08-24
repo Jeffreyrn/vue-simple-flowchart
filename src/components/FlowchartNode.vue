@@ -14,7 +14,7 @@
     <div class="node-port node-output" 
       @mousedown="outputMouseDown">
     </div>
-    <div v-show="show.delete" class="node-delete">x</div>
+    <div v-show="show.delete" class="node-delete">&times;</div>
   </div>
 </template>
 
@@ -107,6 +107,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+$themeColor: rgb(255, 136, 85);
+
 .flowchart-node {
   margin: 0;
   width: 80px;
@@ -114,7 +116,7 @@ export default {
   position: absolute;
   box-sizing: border-box;
   border: none;
-  background: #ccc;
+  background: white;
   z-index: 1;
   opacity: .9;
   cursor: move;
@@ -132,8 +134,8 @@ export default {
     border-radius: 100px;
     background: white;
     &:hover {
-      background: rgb(255, 136, 85);
-      border: 1px solid rgb(255, 136, 85);
+      background: $themeColor;
+      border: 1px solid $themeColor;
     }
   }
   .node-input {
@@ -144,13 +146,20 @@ export default {
   }
   .node-delete {
     position: absolute;
-    right: 0;
-    top: 0;
+    right: -6px;
+    top: -6px;
     font-size: 12px;
-    padding: 0 2px;
-    color: red;
+    width: 12px;
+    height: 12px;
+    color: $themeColor;
     cursor: pointer;
-    line-height: 12px;
+    background: white;
+    border: 1px solid $themeColor;
+    border-radius: 100px;
+    &:hover{
+      background: $themeColor;
+      color: white;
+    }
   }
 }
 </style>

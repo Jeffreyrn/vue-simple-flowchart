@@ -223,5 +223,6 @@ export default {
 <style scoped lang="scss">
 .flowchart-container {
   margin: 0;
+  background: #ddd;
 }
 </style>
