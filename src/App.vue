@@ -9,7 +9,7 @@
       <button @click="addNode">ADD</button>
     </div>
     
-    <simple-flowchart :scene.sync="scene"/>
+    <simple-flowchart :scene.sync="scene" @nodeClick="nodeClick" :height="800"/>
   </div>
 </template>
 
@@ -61,13 +61,12 @@ export default {
       newNodeType: 0,
       newNodeLabel: '',
       nodeCategory:[
-        '规则',
-        '知识包',
-        '动作',
-        '脚本',
-        '决策',
-        '分支',
-        '聚合',
+        'rule',
+        'action',
+        'script',
+        'decision',
+        'fork',
+        'join',
       ],
     }
   },
@@ -83,7 +82,10 @@ export default {
         type: this.nodeCategory[this.newNodeType],
         label: this.newNodeLabel ? this.newNodeLabel: `test${maxID + 1}`,
       })
-    }
+    },
+    nodeClick(id) {
+      console.log('node click', id);
+    },
   }
 }
 </script>
@@ -96,6 +98,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin: 0;
+  overflow: hidden;
+  height: 800px;
   .tool-wrapper {
     position: relative;
   }

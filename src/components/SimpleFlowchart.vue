@@ -1,8 +1,9 @@
 <template>
   <div class="flowchart-container" 
     @mousemove="handleMove" 
-    @mouseup="handleUp">
-    <svg width="100%" height="500px">
+    @mouseup="handleUp"
+    @mousedown="handleDown">
+    <svg width="100%" :height="`${height}px`">
       <flowchart-link v-bind.sync="link" 
         v-for="(link, index) in lines" 
         :key="`link${index}`"></flowchart-link>
@@ -37,13 +38,19 @@ export default {
           links: [],
         }
       }
-    }
+    },
+    height: {
+      type: Number,
+      default: 400,
+    },
   },
   data() {
     return {
       action: {
         linking: false,
         dragging: false,
+        scrolling: false,
+        selected: 0,
       },
       mouse: {
         x: 0,
@@ -70,6 +77,7 @@ export default {
         scale: this.scene.scale,
         offsetTop: this.rootDivOffset.top,
         offsetLeft: this.rootDivOffset.left,
+        selected: this.action.selected,
       }
     },
     lines() {
@@ -158,6 +166,8 @@ export default {
     },
     nodeSelected(id, e) {
       this.action.dragging = id;
+      this.action.selected = id;
+      this.$emit('nodeClick', id);
       this.mouse.lastX = e.pageX || e.clientX + document.documentElement.scrollLeft
       this.mouse.lastY = e.pageY || e.clientY + document.documentElement.scrollTop
     },
@@ -176,6 +186,19 @@ export default {
         this.mouse.lastY = this.mouse.y;
         this.moveSelectedNode(diffX, diffY);
       }
+      if (this.action.scrolling) {
+        [this.mouse.x, this.mouse.y] = getMousePosition(this.$el, e);
+        let diffX = this.mouse.x - this.mouse.lastX;
+        let diffY = this.mouse.y - this.mouse.lastY;
+
+        this.mouse.lastX = this.mouse.x;
+        this.mouse.lastY = this.mouse.y;
+
+        this.scene.centerX += diffX;
+        this.scene.centerY += diffY;
+
+        // this.hasDragged = true
+      }
     },
     handleUp(e) {
       const target = e.target || e.srcElement;
@@ -190,6 +213,17 @@ export default {
       }
       this.action.linking = false;
       this.action.dragging = null;
+      this.action.scrolling = false;
+    },
+    handleDown(e) {
+      const target = e.target || e.srcElement;
+      // console.log('for scroll', target, e.keyCode, e.which)
+      if ((target === this.$el || target.matches('svg, svg *')) && e.which === 1) {
+        this.action.scrolling = true;
+        [this.mouse.lastX, this.mouse.lastY] = getMousePosition(this.$el, e);
+        this.action.selected = null;
+        // TODO: deselectAll
+      }
     },
     moveSelectedNode(dx, dy) {
       let index = this.scene.nodes.findIndex((item) => {
@@ -220,5 +254,8 @@ export default {
 .flowchart-container {
   margin: 0;
   background: #ddd;
+  svg {
+    cursor: grab;
+  }
 }
 </style>

@@ -11,6 +11,12 @@ a Vue.js flowchart editor component, code with vanillaJS
   
 ### Usage
 
+install via npm/yarn
+
+```
+yarn add vue-simple-flowchart
+```
+
 import in script
 
 ```js
@@ -64,6 +70,16 @@ data() {
 }
 ```
 
+### Component
+
+#### Attributes
+
+- height, type: Number, default: 400
+
+#### Events
+
+- nodeClick, emit when node click, event: nodeID
+
 ## Project setup
 
 ```
@@ -84,3 +100,10 @@ yarn run build
 ```
 yarn run lint
 ```
+
+## TODO
+
+- Add horizontal mode
+- Optimizition for large node array
+- Show demo/fiddle link
+- Theme color configurable

@@ -2,14 +2,15 @@
   <div class="flowchart-node" :style="nodeStyle" 
     @mousedown="handleMousedown"
     @mouseover="handleMouseOver"
-    @mouseleave="handleMouseLeave">
+    @mouseleave="handleMouseLeave"
+    v-bind:class="{selected: options.selected === id}">
     <div class="node-port node-input"
        @mousedown="inputMouseDown"
        @mouseup="inputMouseUp">
     </div>
     <div class="node-main">
-      <div v-text="type"></div>
-      <div v-text="label"></div>
+      <div v-text="type" class="node-type"></div>
+      <div v-text="label" class="node-label"></div>
     </div>
     <div class="node-port node-output" 
       @mousedown="outputMouseDown">
@@ -22,6 +23,13 @@
 export default {
   name: 'FlowchartNode',
   props: {
+    id: {
+      type: Number,
+      default: 1000,
+      validator(val) {
+        return typeof val === 'number'
+      }
+    },
     x: {
       type: Number,
       default: 0,
@@ -69,7 +77,7 @@ export default {
       return {
         top: this.options.offsetTop + this.options.centerY + this.y * this.options.scale + 'px',
         left: this.options.offsetLeft + this.options.centerX + this.x * this.options.scale + 'px',
-        transform: 'scale(' + (this.options.scale + '') + ')',
+        transform: `scale(${this.options.scale})`,
       }
     }
   },
@@ -122,7 +130,16 @@ $themeColor: rgb(255, 136, 85);
   cursor: move;
   transform-origin: top left;
   .node-main {
-    margin-top: 10px;
+    text-align: center;
+    .node-type {
+      background: $themeColor;
+      color: white;
+      font-size: 13px;
+      padding: 6px;
+    }
+    .node-label {
+      font-size: 13px;
+    }
   }
   .node-port {
     position: absolute;
@@ -156,10 +173,14 @@ $themeColor: rgb(255, 136, 85);
     background: white;
     border: 1px solid $themeColor;
     border-radius: 100px;
+    text-align: center;
     &:hover{
       background: $themeColor;
       color: white;
     }
   }
+}
+.selected {
+  box-shadow: 0 0 0 2px $themeColor;
 }
 </style>
