@@ -183,8 +183,14 @@ export default {
       const target = e.target || e.srcElement;
       console.log('111111111', this.$el.offsetTop)
       console.log(target.className, this.$el.contains)
-      if (this.$el.contains(target) && (typeof target.className !== 'string' || target.className.indexOf('node-input') < 0)) {
-        this.draggingLink = null;
+      if (this.$el.contains(target)) {
+        if (typeof target.className !== 'string' || target.className.indexOf('node-input') < 0) {
+          this.draggingLink = null;
+        }
+        if (typeof target.className === 'string' && target.className.indexOf('node-delete') > -1) {
+          console.log('delete2', this.action.dragging)
+          this.nodeDelete(this.action.dragging)
+        }
       }
       this.action.linking = false;
       this.action.dragging = null;
@@ -199,6 +205,15 @@ export default {
         x: left,
         y: top,
       }));
+    },
+    nodeDelete(id) {
+      console.log('delete', id)
+      this.scene.nodes = this.scene.nodes.filter((node) => {
+        return node.id !== id;
+      })
+      this.scene.links = this.scene.links.filter((link) => {
+        return link.from !== id && link.to !== id
+      })
     }
   },
 }

@@ -1,14 +1,20 @@
 <template>
-  <div class="flowchart-node" :style="nodeStyle" @mousedown="handleNodeSelected">
+  <div class="flowchart-node" :style="nodeStyle" 
+    @mousedown="handleMousedown"
+    @mouseover="handleMouseOver"
+    @mouseleave="handleMouseLeave">
     <div class="node-port node-input"
        @mousedown="inputMouseDown"
-       @mouseup="inputMouseUp"></div>
+       @mouseup="inputMouseUp">
+    </div>
     <div class="node-main">
       <div v-text="type"></div>
       <div v-text="label"></div>
     </div>
     <div class="node-port node-output" 
-      @mousedown="outputMouseDown"></div>
+      @mousedown="outputMouseDown">
+    </div>
+    <div v-show="show.delete" class="node-delete">x</div>
   </div>
 </template>
 
@@ -49,6 +55,13 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      show: {
+        delete: false,
+      }
+    }
+  },
   mounted() {
   },
   computed: {
@@ -61,13 +74,20 @@ export default {
     }
   },
   methods: {
-    handleNodeSelected(e) {
+    handleMousedown(e) {
       const target = e.target || e.srcElement;
       console.log(target)
+      
       if (target.className.indexOf('node-input') < 0 && target.className.indexOf('node-output') < 0) {
         this.$emit('nodeSelected', e);
       }
       e.preventDefault();
+    },
+    handleMouseOver() {
+      this.show.delete = true;
+    },
+    handleMouseLeave() {
+      this.show.delete = false;
     },
     outputMouseDown(e) {
       this.$emit('linkingStart')
@@ -121,6 +141,16 @@ export default {
   }
   .node-output {
     bottom: -5px;
+  }
+  .node-delete {
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-size: 12px;
+    padding: 0 2px;
+    color: red;
+    cursor: pointer;
+    line-height: 12px;
   }
 }
 </style>
