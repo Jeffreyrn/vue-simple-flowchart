@@ -9,7 +9,11 @@
       <button @click="addNode">ADD</button>
     </div>
     
-    <simple-flowchart :scene.sync="scene" @nodeClick="nodeClick" :height="800"/>
+    <simple-flowchart :scene.sync="scene" 
+      @nodeClick="nodeClick"
+      @nodeDelete="nodeDelete"
+      @linkBreak="linkBreak"
+      :height="800"/>
   </div>
 </template>
 
@@ -85,6 +89,12 @@ export default {
     },
     nodeClick(id) {
       console.log('node click', id);
+    },
+    nodeDelete(id) {
+      console.log('node delete', id);
+    },
+    linkBreak(id) {
+      console.log('link break', id);
     },
   }
 }

@@ -162,6 +162,7 @@ export default {
         this.scene.links = this.scene.links.filter((item) => {
           return item.to !== id;
         })
+        this.$emit('linkBreak', id);
       }
     },
     nodeSelected(id, e) {
@@ -244,6 +245,7 @@ export default {
       this.scene.links = this.scene.links.filter((link) => {
         return link.from !== id && link.to !== id
       })
+      this.$emit('nodeDelete', id)
     }
   },
 }
