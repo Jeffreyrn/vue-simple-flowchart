@@ -79,7 +79,9 @@ data() {
 
 #### Events
 
-- nodeClick, emit when node click, event: nodeID
+- nodeClick, emit when node click, event = nodeID
+- nodeDelete: emit when node deleted, event = nodeID
+- linkBreak: emit when all link to the node is deleted, event = nodeID
 
 ## Project setup
 
