@@ -1,6 +1,6 @@
 {
   "name": "vue-simple-flowchart",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": false,
   "main": "./dist/vue-flowchart.common.js",
   "scripts": {
@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint",
     "build:bundle": "vue-cli-service build --target lib --name vue-flowchart ./src/index.js"
   },
+  "license": "MIT",
   "dependencies": {
     "vue": "^2.5.17"
   },

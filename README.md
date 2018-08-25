@@ -8,6 +8,7 @@ a Vue.js flowchart editor component, code with vanillaJS
 
 - drag to connent two node
 - support add, delete, edit node
+- reactive flowchart data
   
 ### Usage
 
@@ -107,3 +108,5 @@ yarn run lint
 - Optimizition for large node array
 - Show demo/fiddle link
 - Theme color configurable
+- Remove Console.log in build mode
+- fix svg overflow
