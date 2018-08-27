@@ -14,6 +14,7 @@
       @nodeDelete="nodeDelete"
       @linkBreak="linkBreak"
       @linkAdded="linkAdded"
+      @canvasClick="canvasClick"
       :height="800"/>
   </div>
 </template>
@@ -76,6 +77,9 @@ export default {
     }
   },
   methods: {
+    canvasClick(e) {
+      console.log('canvas Click, event:', e)
+    },
     addNode() {
       let maxID = Math.max(0, ...this.scene.nodes.map((link) => {
         return link.id

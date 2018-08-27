@@ -225,9 +225,9 @@ export default {
       if ((target === this.$el || target.matches('svg, svg *')) && e.which === 1) {
         this.action.scrolling = true;
         [this.mouse.lastX, this.mouse.lastY] = getMousePosition(this.$el, e);
-        this.action.selected = null;
-        // TODO: deselectAll
+        this.action.selected = null; // deselectAll
       }
+      this.$emit('canvasClick', e);
     },
     moveSelectedNode(dx, dy) {
       let index = this.scene.nodes.findIndex((item) => {
