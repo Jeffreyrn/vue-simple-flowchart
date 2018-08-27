@@ -114,3 +114,4 @@ yarn run lint
 - Theme color configurable
 - Remove Console.log in build mode
 - fix svg overflow
+- add arrow for link

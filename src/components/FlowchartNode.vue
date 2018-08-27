@@ -75,8 +75,8 @@ export default {
   computed: {
     nodeStyle() {
       return {
-        top: this.options.offsetTop + this.options.centerY + this.y * this.options.scale + 'px',
-        left: this.options.offsetLeft + this.options.centerX + this.x * this.options.scale + 'px',
+        top: this.options.centerY + this.y * this.options.scale + 'px', // remove: this.options.offsetTop + 
+        left: this.options.centerX + this.x * this.options.scale + 'px', // remove: this.options.offsetLeft + 
         transform: `scale(${this.options.scale})`,
       }
     }

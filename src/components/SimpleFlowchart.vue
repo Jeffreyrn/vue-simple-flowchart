@@ -88,7 +88,6 @@ export default {
         x = this.scene.centerX + fromNode.x;
         y = this.scene.centerY + fromNode.y;
         [cx, cy] = this.getPortPosition('bottom', x, y);
-        
         x = this.scene.centerX + toNode.x;
         y = this.scene.centerY + toNode.y;
         [ex, ey] = this.getPortPosition('top', x, y);
@@ -259,6 +258,8 @@ export default {
 .flowchart-container {
   margin: 0;
   background: #ddd;
+  position: relative;
+  overflow: hidden;
   svg {
     cursor: grab;
   }
