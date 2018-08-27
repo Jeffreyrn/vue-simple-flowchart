@@ -145,15 +145,18 @@ export default {
       console.log(index)
     },
     linkingStop(index) {
+      // add new Link
       if (this.draggingLink) {
         let maxID = Math.max(0, ...this.scene.links.map((link) => {
           return link.id
         }))
-        this.scene.links.push({
+        const newLink = {
           id: maxID + 1,
           from: this.draggingLink.from,
           to: index,
-        })
+        };
+        this.scene.links.push(newLink)
+        this.$emit('linkAdded', newLink)
         this.draggingLink = null
       }
     },

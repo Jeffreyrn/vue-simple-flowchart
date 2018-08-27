@@ -13,6 +13,7 @@
       @nodeClick="nodeClick"
       @nodeDelete="nodeDelete"
       @linkBreak="linkBreak"
+      @linkAdded="linkAdded"
       :height="800"/>
   </div>
 </template>
@@ -96,6 +97,9 @@ export default {
     linkBreak(id) {
       console.log('link break', id);
     },
+    linkAdded(link) {
+      console.log('new link added:', link);
+    }
   }
 }
 </script>
