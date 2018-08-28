@@ -2,7 +2,11 @@
 
 ## Introduction
 
-a lightweight flowchart editor for Vue.js, code with vanillaJS, [Demo](https://jeffreyrn.github.io/vue-simple-flowchart/demo/)
+a lightweight flowchart editor for Vue.js, code with vanillaJS, 
+
+## Demo
+
+[https://jeffreyrn.github.io/vue-simple-flowchart/demo/](https://jeffreyrn.github.io/vue-simple-flowchart/demo/)
 
 ### Feature
 
