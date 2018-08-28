@@ -101,7 +101,6 @@ export default {
       e.preventDefault();
     },
     inputMouseDown(e) {
-      this.$emit('linkingBreak')
       e.preventDefault();
     },
     inputMouseUp(e) {

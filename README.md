@@ -81,7 +81,7 @@ data() {
 
 - nodeClick, emit when node click, event = nodeID
 - nodeDelete: emit when node deleted, event = nodeID
-- linkBreak: emit when all link to the node is deleted, event = nodeID
+- linkBreak: emit when the selected link deleted, event = {id, from, to} (deleted link Object)
 - linkAdded: emit when new link added, event = {id, from, to} (new link Object)
 - canvasClick: emit when canvas click, event = { (Event Object) }
 

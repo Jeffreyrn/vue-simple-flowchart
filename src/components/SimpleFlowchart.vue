@@ -6,7 +6,9 @@
     <svg width="100%" :height="`${height}px`">
       <flowchart-link v-bind.sync="link" 
         v-for="(link, index) in lines" 
-        :key="`link${index}`"></flowchart-link>
+        :key="`link${index}`"
+        @deleteLink="linkDelete(link.id)">
+      </flowchart-link>
     </svg>
     <flowchart-node v-bind.sync="node" 
       v-for="(node, index) in scene.nodes" 
@@ -14,8 +16,8 @@
       :options="nodeOptions"
       @linkingStart="linkingStart(node.id)"
       @linkingStop="linkingStop(node.id)"
-      @linkingBreak="linkingBreak(node.id)"
-      @nodeSelected="nodeSelected(node.id, $event)"></flowchart-node>
+      @nodeSelected="nodeSelected(node.id, $event)">
+    </flowchart-node>
   </div>
 </template>
 
@@ -94,6 +96,7 @@ export default {
         return { 
           start: [cx, cy], 
           end: [ex, ey],
+          id: link.id,
         };
       })
       if (this.draggingLink) {
@@ -154,12 +157,15 @@ export default {
         this.draggingLink = null
       }
     },
-    linkingBreak(id) {
-      if (this.scene.links.length > 0) {
+    linkDelete(id) {
+      const deletedLink = this.scene.links.find((item) => {
+          return item.id === id;
+      });
+      if (deletedLink) {
         this.scene.links = this.scene.links.filter((item) => {
-          return item.to !== id;
-        })
-        this.$emit('linkBreak', id);
+            return item.id !== id;
+        });
+        this.$emit('linkBreak', deletedLink);
       }
     },
     nodeSelected(id, e) {

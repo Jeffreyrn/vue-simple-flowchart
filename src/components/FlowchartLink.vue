@@ -1,7 +1,14 @@
 <template>
-  <g>
+  <g @mouseover="handleMouseOver"
+    @mouseleave="handleMouseLeave">
     <path :d="dAttr" :style="pathStyle"></path>
-    <path d="M -1 -1 L 0 1 L 1 -1 z"
+    <a v-if="show.delete" @click="deleteLink">
+      <text 
+        text-anchor="middle" 
+        :transform="arrowTransform"
+        font-size="22">&times;</text>
+    </a>
+    <path v-else d="M -1 -1 L 0 1 L 1 -1 z"
       :style="arrowStyle"
       :transform="arrowTransform"></path>
   </g>
@@ -26,6 +33,36 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      show: {
+        delete: false,
+      }
+    }
+  },
+  methods: {
+    handleMouseOver() {
+      this.show.delete = true;
+    },
+    handleMouseLeave() {
+      this.show.delete = false;
+    },
+    caculateCenterPoint() {
+      // caculate arrow position: the center point between start and end
+      const dx = (this.end[0] - this.start[0]) / 2;
+      const dy = (this.end[1] - this.start[1]) / 2;
+      return [this.start[0] + dx, this.start[1] + dy];
+    },
+    caculateRotation() {
+      // caculate arrow rotation
+      const angle = -Math.atan2(this.end[0] - this.start[0], this.end[1] - this.start[1]);
+      const degree = angle * 180 / Math.PI;
+      return degree < 0 ? degree + 360 : degree;
+    },
+    deleteLink() {
+      this.$emit('deleteLink')
+    }
+  },
   computed: {
     pathStyle() {
       return {
@@ -42,15 +79,8 @@ export default {
       }
     },
     arrowTransform() {
-      // caculate arrow position: the center point between start and end
-      const dx = (this.end[0] - this.start[0]) / 2;
-      const dy = (this.end[1] - this.start[1]) / 2;
-      const [arrowX, arrowY] = [this.start[0] + dx, this.start[1] + dy];
-      // caculate arrow rotation
-      const angle = -Math.atan2(this.end[0] - this.start[0], this.end[1] - this.start[1]);
-      let degree = angle * 180 / Math.PI;
-      degree = degree < 0 ? degree + 360 : degree;
-      
+      const [arrowX, arrowY] = this.caculateCenterPoint();
+      const degree = this.caculateRotation()
       return `translate(${arrowX}, ${arrowY}) rotate(${degree})`;
     },
     dAttr() {
@@ -62,3 +92,8 @@ export default {
 }
 </script>
 
+<style scoped lang="scss">
+g {
+  cursor: pointer;
+}
+</style>
