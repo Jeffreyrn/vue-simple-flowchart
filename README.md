@@ -113,5 +113,3 @@ yarn run lint
 - Show demo/fiddle link
 - Theme color configurable
 - Remove Console.log in build mode
-- fix svg overflow
-- add arrow for link
