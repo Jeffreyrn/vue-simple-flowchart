@@ -2,7 +2,7 @@
 
 ## Introduction
 
-a Vue.js flowchart editor component, code with vanillaJS
+a Vue.js flowchart editor component, lightweight, code with vanillaJS, [Demo](https://jeffreyrn.github.io/vue-simple-flowchart/demo/)
 
 ### Feature
 
@@ -110,6 +110,5 @@ yarn run lint
 
 - Add horizontal mode
 - Optimizition for large node array
-- Show demo/fiddle link
 - Theme color configurable
 - Remove Console.log in build mode
