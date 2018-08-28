@@ -5,7 +5,7 @@
   "main": "./dist/vue-flowchart.common.js",
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "vue-cli-service build --dest demo",
     "lint": "vue-cli-service lint",
     "build:bundle": "vue-cli-service build --target lib --name vue-flowchart ./src/index.js"
   },
