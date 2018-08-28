@@ -6,8 +6,8 @@ a Vue.js flowchart editor component, code with vanillaJS
 
 ### Feature
 
-- drag to connent two node
-- support add, delete, edit node
+- drag to connent two node, click to delete link
+- support add, delete, save node
 - reactive flowchart data
   
 ### Usage
