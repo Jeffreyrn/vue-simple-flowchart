@@ -143,19 +143,25 @@ export default {
     },
     linkingStop(index) {
       // add new Link
-      if (this.draggingLink) {
-        let maxID = Math.max(0, ...this.scene.links.map((link) => {
-          return link.id
-        }))
-        const newLink = {
-          id: maxID + 1,
-          from: this.draggingLink.from,
-          to: index,
-        };
-        this.scene.links.push(newLink)
-        this.$emit('linkAdded', newLink)
-        this.draggingLink = null
+      if (this.draggingLink && this.draggingLink.from !== index) {
+        // check link existence
+        const existed = this.scene.links.find((link) => {
+          return link.from === this.draggingLink.from && link.to === index;
+        })
+        if (!existed) {
+          let maxID = Math.max(0, ...this.scene.links.map((link) => {
+            return link.id
+          }))
+          const newLink = {
+            id: maxID + 1,
+            from: this.draggingLink.from,
+            to: index,
+          };
+          this.scene.links.push(newLink)
+          this.$emit('linkAdded', newLink)
+        }
       }
+      this.draggingLink = null
     },
     linkDelete(id) {
       const deletedLink = this.scene.links.find((item) => {

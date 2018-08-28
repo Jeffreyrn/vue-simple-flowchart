@@ -31,7 +31,8 @@ export default {
       default() {
         return [0, 0]
       }
-    }
+    },
+    id: Number,
   },
   data() {
     return {
@@ -42,7 +43,9 @@ export default {
   },
   methods: {
     handleMouseOver() {
-      this.show.delete = true;
+      if (this.id) {
+        this.show.delete = true;
+      }
     },
     handleMouseLeave() {
       this.show.delete = false;
