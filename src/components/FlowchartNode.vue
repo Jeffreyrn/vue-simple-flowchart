@@ -84,8 +84,7 @@ export default {
   methods: {
     handleMousedown(e) {
       const target = e.target || e.srcElement;
-      console.log(target)
-      
+      // console.log(target);
       if (target.className.indexOf('node-input') < 0 && target.className.indexOf('node-output') < 0) {
         this.$emit('nodeSelected', e);
       }

@@ -91,7 +91,10 @@ export default {
         x = this.scene.centerX + toNode.x;
         y = this.scene.centerY + toNode.y;
         [ex, ey] = this.getPortPosition('top', x, y);
-        return this.calculateDFromPosition(...[cx, cy], ...[ex, ey]);
+        return { 
+          start: [cx, cy], 
+          end: [ex, ey],
+        };
       })
       if (this.draggingLink) {
         let x, y, cy, cx;
@@ -99,9 +102,11 @@ export default {
         x = this.scene.centerX + fromNode.x;
         y = this.scene.centerY + fromNode.y;
         [cx, cy] = this.getPortPosition('bottom', x, y);
-
-        const tempLink = this.calculateDFromPosition(...[cx, cy], this.draggingLink.mx, this.draggingLink.my);
-        lines.push(tempLink)
+        // push temp dragging link, mouse cursor postion = link end postion 
+        lines.push({ 
+          start: [cx, cy], 
+          end: [this.draggingLink.mx, this.draggingLink.my],
+        })
       }
       return lines;
     }
@@ -109,18 +114,9 @@ export default {
   mounted() {
     this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
     this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
-    console.log(22222, this.rootDivOffset)
+    // console.log(22222, this.rootDivOffset);
   },
   methods: {
-    calculateDFromPosition(cx, cy, ex, ey) {
-      let x1 = cx,
-        y1 = cy + 50,
-        x2 = ex,
-        y2 = ey - 50;
-      return {
-        dAttr: `M ${cx}, ${cy} C ${x1}, ${y1}, ${x2}, ${y2}, ${ex}, ${ey}`,
-      }
-    },
     findNodeWithID(id) {
       return this.scene.nodes.find((item) => {
           return id === item.id
@@ -141,7 +137,6 @@ export default {
         mx: 0,
         my: 0,
       };
-      console.log(index)
     },
     linkingStop(index) {
       // add new Link
@@ -210,8 +205,8 @@ export default {
           this.draggingLink = null;
         }
         if (typeof target.className === 'string' && target.className.indexOf('node-delete') > -1) {
-          console.log('delete2', this.action.dragging)
-          this.nodeDelete(this.action.dragging)
+          // console.log('delete2', this.action.dragging);
+          this.nodeDelete(this.action.dragging);
         }
       }
       this.action.linking = false;
@@ -240,7 +235,6 @@ export default {
       }));
     },
     nodeDelete(id) {
-      console.log('delete', id)
       this.scene.nodes = this.scene.nodes.filter((node) => {
         return node.id !== id;
       })

@@ -11,7 +11,20 @@
 export default {
   name: 'FlowchartLink',
   props: {
-    dAttr: String,
+    // start point position [x, y]
+    start: {
+      type: Array,
+      default() {
+        return [0, 0]
+      }
+    },
+    // end point position [x, y]
+    end: {
+      type: Array,
+      default() {
+        return [0, 0]
+      }
+    }
   },
   computed: {
     pathStyle() {
@@ -23,6 +36,11 @@ export default {
     },
     arrowTransform() {
       return 'translate(1, 1) rotate(0)'
+    },
+    dAttr() {
+      let cx = this.start[0], cy = this.start[1], ex = this.end[0], ey = this.end[1];
+      let x1 = cx, y1 = cy + 50, x2 = ex, y2 = ey - 50;
+      return `M ${cx}, ${cy} C ${x1}, ${y1}, ${x2}, ${y2}, ${ex}, ${ey}`;
     }
   }
 }
