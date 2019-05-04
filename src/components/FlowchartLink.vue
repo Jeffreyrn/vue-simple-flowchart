@@ -32,7 +32,7 @@ export default {
         return [0, 0]
       }
     },
-    id: Number,
+    id: [Number, String],
   },
   data() {
     return {
