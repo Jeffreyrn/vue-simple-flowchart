@@ -24,11 +24,8 @@ export default {
   name: 'FlowchartNode',
   props: {
     id: {
-      type: Number,
+      type: [Number, String],
       default: 1000,
-      validator(val) {
-        return typeof val === 'number'
-      }
     },
     x: {
       type: Number,
@@ -118,8 +115,8 @@ $portSize: 12;
 
 .flowchart-node {
   margin: 0;
-  width: 80px;
-  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
   position: absolute;
   box-sizing: border-box;
   border: none;
