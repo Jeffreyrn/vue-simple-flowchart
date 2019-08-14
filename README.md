@@ -3,6 +3,10 @@
 ## Introduction
 
 a lightweight flowchart editor for Vue.js, code with vanillaJS, 
+### Note
+This repository is not being actively maintained due to lack of time and interest. 
+
+My sincerest apologies to the open source community for allowing this project to stagnate. I hope it was useful for some of you as a jumping-off point.
 
 ## Demo
 
