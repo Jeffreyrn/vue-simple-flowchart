@@ -1,4 +1,12 @@
 <template>
+<div @mouseup="itemRelease" @mousemove="itemMove">
+<div id="flowchart" class="flowchart"   @dragstart="onDragStart">
+<div id="toolbar" class="flowchart-toolbar">
+  <div class="flowchart-toolbar-item" @mousedown="itemClick">
+    <div class="square" />
+    <span>Rule</span>
+  </div>
+</div>
   <div class="flowchart-container" 
     @mousemove="handleMove" 
     @mouseup="handleUp"
@@ -18,7 +26,10 @@
       @linkingStop="linkingStop(node.id)"
       @nodeSelected="nodeSelected(node.id, $event)">
     </flowchart-node>
+    <div class="dragging-node" :style="{ top: `${draggingNodeTop}px`, left: `${draggingNodeLeft}px` }" />
   </div>
+</div>
+</div>
 </template>
 
 <script>
@@ -65,6 +76,9 @@ export default {
         top: 0,
         left: 0
       },
+      moving: false,
+      draggingNodeTop: 0,
+      draggingNodeLeft: 0
     };
   },
   components: {
@@ -254,6 +268,40 @@ export default {
         return link.from !== id && link.to !== id
       })
       this.$emit('nodeDelete', id)
+    },
+    onDragStart() {
+      return false;
+    },
+    itemClick(e) {
+      this.moving = true;
+      e.returnValue=false;
+      return false;
+    },
+    itemMove(e) {
+      if(this.moving) {
+        [this.mouse.x, this.mouse.y] = getMousePosition(this.$el, e);
+
+        this.mouse.x = e.pageX || e.clientX + document.documentElement.scrollLeft
+        this.mouse.y = e.pageY || e.clientY + document.documentElement.scrollTop
+        let diffX = this.mouse.x - this.mouse.lastX;
+        let diffY = this.mouse.y - this.mouse.lastY;
+
+        diffX = diffX / this.scene.scale
+        diffY = diffY / this.scene.scale
+
+        const toolbarWidth = document.getElementById("toolbar").clientWidth;
+        const flowchartHeight = document.getElementById("flowchart").clientHeight;
+        const docHeight = document.body.clientHeight;
+
+        this.draggingNodeTop = diffY - (docHeight - flowchartHeight) - 160;
+        this.draggingNodeLeft = diffX - toolbarWidth - (80/2);
+
+        return false;
+      }
+    },
+    itemRelease(e) {
+      console.warn('release')
+      this.moving = false;
     }
   },
 }
@@ -261,7 +309,38 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.flowchart{
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex: 1;
+}
+.dragging-node{
+  width: 60px;
+  height: 60px;
+  border: 2px dashed black;
+  position: absolute;
+}
+.flowchart-toolbar{
+  flex: 0.1;
+  padding-top: 10px;
+}
+.flowchart-toolbar-item{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.square {
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
+  margin-bottom: 10px;
+}
 .flowchart-container {
+  flex: 0.9;
   margin: 0;
   background: #ddd;
   position: relative;
