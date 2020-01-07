@@ -2,11 +2,11 @@
 <div @mouseup="itemRelease" @mousemove="itemMove">
 <div id="flowchart" class="flowchart"   @dragstart="onDragStart">
 <div id="toolbar" class="flowchart-toolbar">
-  <div class="flowchart-toolbar-item" @mousedown="(e) => itemClick(e, 'rule')">
+  <div class="flowchart-toolbar-item" @mousedown="(e) => itemClick(e, 'Rule')">
     <div class="square" />
     <span>Rule</span>
   </div>
-   <div class="flowchart-toolbar-item" @mousedown="(e) => itemClick(e, 'decision')">
+   <div class="flowchart-toolbar-item" @mousedown="(e) => itemClick(e, 'Action')">
     <div class="square" />
     <span>Action</span>
   </div>

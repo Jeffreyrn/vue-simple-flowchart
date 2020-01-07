@@ -104,7 +104,7 @@ export default {
         id: maxID + 1,
         x: x,
         y,
-        type: this.nodeCategory[nodeType],
+        type: nodeType,
         label: label,
       })
     },
