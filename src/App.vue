@@ -33,8 +33,8 @@ export default {
   data() {
     return {
       scene: {
-        centerX: -15,
-        centerY: -15,
+        centerX: 0,
+        centerY: 0,
         scale: 1,
         nodes: [
           {

@@ -47,9 +47,9 @@ export default {
       type: Object,
       default() {
         return {
-          centerX: -15,
+          centerX: 0,
           scale: 1,
-          centerY: -15,
+          centerY: 0,
           nodes: [],
           links: [],
         }
@@ -108,11 +108,11 @@ export default {
         const fromNode = this.findNodeWithID(link.from)
         const toNode = this.findNodeWithID(link.to)
         let x, y, cy, cx, ex, ey;
-        x = this.scene.centerX + fromNode.x;
-        y = this.scene.centerY + fromNode.y;
+        x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
+        y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
         [cx, cy] = this.getPortPosition('bottom', x, y);
-        x = this.scene.centerX + toNode.x;
-        y = this.scene.centerY + toNode.y;
+        x = this.scene.centerX + (toNode.centeredX || toNode.x);
+        y = this.scene.centerY + (toNode.centeredY || toNode.y);
         [ex, ey] = this.getPortPosition('top', x, y);
         return { 
           start: [cx, cy], 
@@ -123,8 +123,8 @@ export default {
       if (this.draggingLink) {
         let x, y, cy, cx;
         const fromNode = this.findNodeWithID(this.draggingLink.from)
-        x = this.scene.centerX + fromNode.x;
-        y = this.scene.centerY + fromNode.y;
+        x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
+        y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
         [cx, cy] = this.getPortPosition('bottom', x, y);
         // push temp dragging link, mouse cursor postion = link end postion 
         lines.push({ 
@@ -138,7 +138,6 @@ export default {
   mounted() {
     this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
     this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
-    // console.log(22222, this.rootDivOffset);
   },
   methods: {
     findNodeWithID(id) {
@@ -205,7 +204,13 @@ export default {
     handleMove(e) {
       if (this.action.linking) {
         [this.mouse.x, this.mouse.y] = getMousePosition(this.$el, e);
-        [this.draggingLink.mx, this.draggingLink.my] = [this.mouse.x, this.mouse.y];
+        this.mouse.x = e.pageX || e.clientX + document.documentElement.scrollLeft;
+        this.mouse.y = e.pageY || e.clientY + document.documentElement.scrollTop;
+
+        const toolbarWidth = document.getElementById("toolbar").offsetWidth;
+        const titleHeight = document.getElementById("title").offsetHeight + 15;
+
+        [this.draggingLink.mx, this.draggingLink.my] = [this.mouse.x - toolbarWidth, this.mouse.y - titleHeight];
       }
       if (this.action.dragging) {
         this.mouse.x = e.pageX || e.clientX + document.documentElement.scrollLeft
@@ -225,8 +230,8 @@ export default {
         this.mouse.lastX = this.mouse.x;
         this.mouse.lastY = this.mouse.y;
 
-        this.scene.centerX += diffX;
-        this.scene.centerY += diffY;
+        this.scene.centerX = diffX;
+        this.scene.centerY = diffY;
 
         this.scene.nodes = this.scene.nodes.map((node) => ({
           ...node,
@@ -266,11 +271,13 @@ export default {
       let index = this.scene.nodes.findIndex((item) => {
         return item.id === this.action.dragging
       })
-      let left = this.scene.nodes[index].x + dx / this.scene.scale;
-      let top = this.scene.nodes[index].y + dy / this.scene.scale;
+      let left = (this.scene.nodes[index].centeredX || this.scene.nodes[index].x) + dx / this.scene.scale;
+      let top = (this.scene.nodes[index].centeredY || this.scene.nodes[index].y) + dy / this.scene.scale;
       this.$set(this.scene.nodes, index, Object.assign(this.scene.nodes[index], {
         x: left,
         y: top,
+        centeredX: left,
+        centeredY: top
       }));
     },
     nodeDelete(id) {

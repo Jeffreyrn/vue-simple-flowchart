@@ -13,7 +13,9 @@
       <div v-text="label" class="node-label"></div>
     </div>
     <div class="node-port node-output" 
-      @mousedown="outputMouseDown">
+      @mousedown="outputMouseDown"
+      @mousemove="outputMouseMove"
+      @mouseleave="outputMouseUp">
     </div>
     <div v-show="show.delete" class="node-delete">&times;</div>
   </div>
@@ -81,7 +83,8 @@ export default {
     return {
       show: {
         delete: false,
-      }
+      },
+      linkingStart: false
     }
   },
   mounted() {
@@ -111,7 +114,16 @@ export default {
       this.show.delete = false;
     },
     outputMouseDown(e) {
-      this.$emit('linkingStart')
+      this.linkingStart = true;
+      e.preventDefault();
+    },
+    outputMouseMove(e) {
+      if(this.linkingStart) {
+       this.$emit('linkingStart')
+      }
+    },
+    outputMouseUp(e) {
+      this.linkingStart = false;
       e.preventDefault();
     },
     inputMouseDown(e) {
