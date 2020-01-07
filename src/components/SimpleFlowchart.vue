@@ -2,9 +2,13 @@
 <div @mouseup="itemRelease" @mousemove="itemMove">
 <div id="flowchart" class="flowchart"   @dragstart="onDragStart">
 <div id="toolbar" class="flowchart-toolbar">
-  <div class="flowchart-toolbar-item" @mousedown="itemClick">
+  <div class="flowchart-toolbar-item" @mousedown="(e) => itemClick(e, 'rule')">
     <div class="square" />
     <span>Rule</span>
+  </div>
+   <div class="flowchart-toolbar-item" @mousedown="(e) => itemClick(e, 'decision')">
+    <div class="square" />
+    <span>Action</span>
   </div>
 </div>
   <div class="flowchart-container" 
@@ -85,7 +89,8 @@ export default {
       },
       moving: false,
       draggingNodeTop: 0,
-      draggingNodeLeft: 0
+      draggingNodeLeft: 0,
+      actionType: ''
     };
   },
   components: {
@@ -292,8 +297,9 @@ export default {
     onDragStart() {
       return false;
     },
-    itemClick(e) {
+    itemClick(e, action) {
       this.moving = true;
+      this.actionType = action;
       this.draggingNodeTop = -100;
       this.draggingNodeLeft = -100;
       e.returnValue=false;
@@ -327,7 +333,7 @@ export default {
       const y = this.draggingNodeTop - titleHeight;
       const x = this.draggingNodeLeft - toolbarWidth;
 
-      this.$emit('onDropNewNode', { x, y, nodeType : 'rule', label: 'New Rule' });
+      this.$emit('onDropNewNode', { x, y, nodeType : this.actionType, label: 'New Rule' });
       }
     }
   },
@@ -371,6 +377,7 @@ export default {
   align-items: center;
   justify-content: center;
   cursor: pointer;
+  margin-bottom: 20px;
 }
 .square {
   width: 30px;
