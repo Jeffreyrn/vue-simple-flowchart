@@ -1,12 +1,14 @@
 <template>
   <div id="app">
-    <h1> simple flowchart</h1>
-    <div class="tool-wrapper">
-      <select v-model="newNodeType">
-        <option v-for="(item, index) in nodeCategory" :key="index" :value="index">{{item}}</option>
-      </select>
-      <input type="text" v-model="newNodeLabel" placeholder="Input node label">
-      <button @click="addNode">ADD</button>
+    <div id="title">
+      <h1> simple flowchart</h1>
+      <div class="tool-wrapper">
+        <select v-model="newNodeType">
+          <option v-for="(item, index) in nodeCategory" :key="index" :value="index">{{item}}</option>
+        </select>
+        <input type="text" v-model="newNodeLabel" placeholder="Input node label">
+        <button @click="addNode">ADD</button>
+      </div>
     </div>
     
     <simple-flowchart :scene.sync="scene" 
@@ -15,6 +17,7 @@
       @linkBreak="linkBreak"
       @linkAdded="linkAdded"
       @canvasClick="canvasClick"
+      @onDropNewNode="onCreateNode"
       :height="800"/>
   </div>
 </template>
@@ -30,28 +33,28 @@ export default {
   data() {
     return {
       scene: {
-        centerX: 1024,
-        centerY: 140,
+        centerX: -15,
+        centerY: -15,
         scale: 1,
         nodes: [
           {
             id: 2,
-            x: -700,
-            y: -69,
+            x: 300,
+            y: 100,
             type: 'Action',
             label: 'test1',
           },
           {
             id: 4,
-            x: -357,
-            y: 80,
+            x: 450,
+            y: 300,
             type: 'Script',
             label: 'test2',
           },
           {
             id: 6,
-            x: -557,
-            y: 80,
+            x: 300,
+            y: 400,
             type: 'Rule',
             label: 'test3',
           }
@@ -90,6 +93,23 @@ export default {
         y: 50,
         type: this.nodeCategory[this.newNodeType],
         label: this.newNodeLabel ? this.newNodeLabel: `test${maxID + 1}`,
+      })
+    },
+    onCreateNode({x, y, nodeType, label}) {
+      console.warn('x', x);
+      console.warn('y', y);
+      console.warn('nodetype', nodeType);
+      console.warn('label', label)
+
+      let maxID = Math.max(0, ...this.scene.nodes.map((link) => {
+        return link.id
+      }))
+      this.scene.nodes.push({
+        id: maxID + 1,
+        x: x,
+        y,
+        type: this.nodeCategory[nodeType],
+        label: label,
       })
     },
     nodeClick(id) {

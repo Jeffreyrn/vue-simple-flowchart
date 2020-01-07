@@ -74,9 +74,11 @@ export default {
   },
   computed: {
     nodeStyle() {
+      console.warn('top style', this.options.centerY + this.y * this.options.scale + 'px')
+      console.warn('left style',this.options.centerX + this.x * this.options.scale + 'px' )
       return {
-        top: this.options.centerY + this.y * this.options.scale + 'px', // remove: this.options.offsetTop + 
-        left: this.options.centerX + this.x * this.options.scale + 'px', // remove: this.options.offsetLeft + 
+        top: this.options.centerY + (this.y * this.options.scale) + 'px', // remove: this.options.offsetTop + 
+        left: this.options.centerX + (this.x * this.options.scale) + 'px', // remove: this.options.offsetLeft + 
         transform: `scale(${this.options.scale})`,
       }
     }

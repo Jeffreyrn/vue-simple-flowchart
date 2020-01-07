@@ -26,8 +26,8 @@
       @linkingStop="linkingStop(node.id)"
       @nodeSelected="nodeSelected(node.id, $event)">
     </flowchart-node>
-    <div class="dragging-node" :style="{ top: `${draggingNodeTop}px`, left: `${draggingNodeLeft}px` }" />
   </div>
+   <div class="dragging-node" v-if="moving" :style="{ top: `${draggingNodeTop}px`, left: `${draggingNodeLeft}px` }" />
 </div>
 </div>
 </template>
@@ -56,6 +56,10 @@ export default {
       type: Number,
       default: 400,
     },
+    onDropNewNode: {
+      type: Function,
+      default: () => {}
+    }
   },
   data() {
     return {
@@ -274,6 +278,8 @@ export default {
     },
     itemClick(e) {
       this.moving = true;
+      this.draggingNodeTop = -100;
+      this.draggingNodeLeft = -100;
       e.returnValue=false;
       return false;
     },
@@ -289,19 +295,24 @@ export default {
         diffX = diffX / this.scene.scale
         diffY = diffY / this.scene.scale
 
-        const toolbarWidth = document.getElementById("toolbar").clientWidth;
-        const flowchartHeight = document.getElementById("flowchart").clientHeight;
-        const docHeight = document.body.clientHeight;
-
-        this.draggingNodeTop = diffY - (docHeight - flowchartHeight) - 160;
-        this.draggingNodeLeft = diffX - toolbarWidth - (80/2);
+        this.draggingNodeTop = diffY - 40 ;
+        this.draggingNodeLeft = diffX - 40 ;
 
         return false;
       }
     },
     itemRelease(e) {
-      console.warn('release')
+      if(this.moving) {
       this.moving = false;
+
+      const toolbarWidth = document.getElementById("toolbar").clientWidth + 10;
+      const titleHeight = document.getElementById("title").clientHeight;
+
+      const y = this.draggingNodeTop - titleHeight;
+      const x = this.draggingNodeLeft - toolbarWidth;
+
+      this.$emit('onDropNewNode', { x, y, nodeType : 'rule', label: 'New Rule' });
+      }
     }
   },
 }
