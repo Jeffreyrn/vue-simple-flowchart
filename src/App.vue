@@ -96,10 +96,6 @@ export default {
       })
     },
     onCreateNode({x, y, nodeType, label}) {
-      console.warn('x', x);
-      console.warn('y', y);
-      console.warn('nodetype', nodeType);
-      console.warn('label', label)
 
       let maxID = Math.max(0, ...this.scene.nodes.map((link) => {
         return link.id

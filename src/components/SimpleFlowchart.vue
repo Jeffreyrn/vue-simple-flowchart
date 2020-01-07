@@ -27,7 +27,10 @@
       @nodeSelected="nodeSelected(node.id, $event)">
     </flowchart-node>
   </div>
-   <div class="dragging-node" v-if="moving" :style="{ top: `${draggingNodeTop}px`, left: `${draggingNodeLeft}px` }" />
+  <div class="dragging-node" v-if="moving" :style="{ top: `${draggingNodeTop}px`, left: `${draggingNodeLeft}px` }">
+    <div class="dragging-node-title" />
+    <div class="dragging-node-label" />
+  </div>
 </div>
 </div>
 </template>
@@ -44,9 +47,9 @@ export default {
       type: Object,
       default() {
         return {
-          centerX: 1024,
+          centerX: -15,
           scale: 1,
-          centerY: 140,
+          centerY: -15,
           nodes: [],
           links: [],
         }
@@ -225,6 +228,12 @@ export default {
         this.scene.centerX += diffX;
         this.scene.centerY += diffY;
 
+        this.scene.nodes = this.scene.nodes.map((node) => ({
+          ...node,
+          centeredX: (node.centeredX || node.x) + diffX,
+          centeredY: (node.centeredY || node.y) + diffY
+        }))
+
         // this.hasDragged = true
       }
     },
@@ -289,8 +298,8 @@ export default {
 
         this.mouse.x = e.pageX || e.clientX + document.documentElement.scrollLeft
         this.mouse.y = e.pageY || e.clientY + document.documentElement.scrollTop
-        let diffX = this.mouse.x - this.mouse.lastX;
-        let diffY = this.mouse.y - this.mouse.lastY;
+        let diffX = this.mouse.x;
+        let diffY = this.mouse.y;
 
         diffX = diffX / this.scene.scale
         diffY = diffY / this.scene.scale
@@ -328,10 +337,22 @@ export default {
   flex: 1;
 }
 .dragging-node{
-  width: 60px;
-  height: 60px;
-  border: 2px dashed black;
+  width: 80px;
+  height: 80px;
   position: absolute;
+  opacity: 0.9;
+  .dragging-node-title{
+    background: #ff8855;
+    color: white;
+    font-size: 13px;
+    height: 30px;
+    width: 80px;
+  }
+  .dragging-node-label{
+    height: 50px;
+    background: #FFF;
+    width: 80px;
+  }
 }
 .flowchart-toolbar{
   flex: 0.1;
