@@ -57,6 +57,9 @@ export default {
             }, {
               id: 2,
               text: 'No'
+            }, {
+              id: 3,
+              text: "I don't know"
             }]
           },
           {

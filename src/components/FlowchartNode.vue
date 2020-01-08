@@ -8,21 +8,26 @@
        @mousedown="inputMouseDown"
        @mouseup="inputMouseUp">
     </div>
-    <div class="node-main">
+    <div :id="'node-main_' + id" class="node-main">
        <div v-if="isStart" class="node-start">
         <span>Conversation Start</span>
       </div>
-      <div v-text="type" class="node-type"></div>
-      <div class="node-label">
-        <div class="node-label-title" v-text="label" />
+      <div ref="nodeType" :id="'node-type_' + id" v-text="type" class="node-type"></div>
+      <div class="node-label" :id="'label_' + id">
+        <div ref="labelTitle" class="node-label-title" :id="'label-title_' + id" v-text="label" />
         <div v-if="buttons.length > 0" class="node-buttons">
          <div v-for="(button, index) in buttons" :key="index" :id="'button_' + id + '_' + index" class="node-label-button">
            <span>{{button.text}}</span>
+           <div class="node-port node-output" :id="'port_' + id + '_' + index" :class="{ 'node-port-start': isStart }" 
+            :style="buttonPortStyle(index)"
+            @mousedown="outputMouseDown"
+            @mousemove="outputMouseMove"
+            @mouseleave="outputMouseUp"></div>
          </div>
       </div>
       </div>
     </div>
-    <div class="node-port node-output" :class="{ 'node-port-start': isStart }"
+    <div v-if="buttons.length === 0" :id="'node-output_' + id" class="node-port node-output" :class="{ 'node-port-start': isStart }"
       @mousedown="outputMouseDown"
       @mousemove="outputMouseMove"
       @mouseleave="outputMouseUp">
@@ -121,6 +126,32 @@ export default {
     }
   },
   methods: {
+     buttonPortStyle(index) {
+      const nodeTypeElement = this.$refs.nodeType;
+      if (!nodeTypeElement) { return; }
+
+      const labelTitleElement = this.$refs.labelTitle;
+      if (!labelTitleElement) { return; }
+
+      const nodeTypeHeight = nodeTypeElement.clientHeight;
+      const labelTitleHeight = labelTitleElement.clientHeight + 16;
+
+      let buttonHeight = labelTitleHeight + nodeTypeHeight;
+      for (let i = index; i >= 0; i--) {
+        const element = document.getElementById('button_' + this.id + '_' + i);
+        if(!element) { continue; }
+        if(i === index) {
+          buttonHeight += element.clientHeight/1.5;
+        } else {
+          buttonHeight += element.clientHeight;
+        }
+      }
+
+      return {
+        top: buttonHeight + 'px',
+        right: '10px'
+      }
+    },
     handleMousedown(e) {
       const target = e.target || e.srcElement;
       // console.log(target);

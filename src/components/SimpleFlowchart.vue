@@ -17,7 +17,7 @@
     @mousedown="handleDown">
     <svg width="100%" :height="`${height}px`">
       <flowchart-link v-bind.sync="link" 
-        v-for="(link, index) in lines" 
+        v-for="(link, index) in lines()" 
         :key="`link${index}`"
         @deleteLink="linkDelete(link.id)">
       </flowchart-link>
@@ -108,6 +108,12 @@ export default {
         selected: this.action.selected,
       }
     },
+  },
+  mounted() {
+    this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
+    this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
+  },
+  methods: {
     lines() {
       const lines = this.scene.links.map((link) => {
         const fromNode = this.findNodeWithID(link.from)
@@ -115,10 +121,10 @@ export default {
         let x, y, cy, cx, ex, ey;
         x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
         y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
-        [cx, cy] = this.getPortPosition('right', x, y, fromNode.isStart);
+        [cx, cy] = this.getPortPosition(fromNode.id, 'right', x, y);
         x = this.scene.centerX + (toNode.centeredX || toNode.x);
         y = this.scene.centerY + (toNode.centeredY || toNode.y);
-        [ex, ey] = this.getPortPosition('left', x, y, fromNode.isStart);
+        [ex, ey] = this.getPortPosition(toNode.id, 'left', x, y);
         return { 
           start: [cx, cy], 
           end: [ex, ey],
@@ -138,24 +144,25 @@ export default {
         })
       }
       return lines;
-    }
-  },
-  mounted() {
-    this.rootDivOffset.top = this.$el ? this.$el.offsetTop : 0;
-    this.rootDivOffset.left = this.$el ? this.$el.offsetLeft : 0;
-  },
-  methods: {
+    },
     findNodeWithID(id) {
       return this.scene.nodes.find((item) => {
           return id === item.id
       })
     },
-    getPortPosition(type, x, y, isStart) {
+    getPortPosition(id, type, x, y) {
+      const labelElement = document.getElementById('node-main_' + id);
+
+      let labelHeight = 0;
+      if (labelElement) {
+        labelHeight = labelElement.clientHeight;
+      }
+
       if (type === 'right') {
-        return [x + 250, isStart ? y + 100 : y + 70]
+        return [x + 250, y + labelHeight/2 + 30]
       }
       if (type === 'left') {
-        return [x, y + 70]
+        return [x, y + labelHeight/2]
       }
       if (type === 'top') {
         return [x + 40, y];
