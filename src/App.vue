@@ -42,14 +42,22 @@ export default {
             x: 300,
             y: 100,
             type: 'Action',
-            label: 'test1',
+            label: 'Hello, This is KR dev bot! How can I help you?',
+            isStart: true
           },
           {
             id: 4,
             x: 450,
             y: 300,
             type: 'Script',
-            label: 'test2',
+            label: 'Do you have any symptoms described below such as cough, fever, etc?',
+            buttons: [{
+              id: 1,
+              text: 'Yes'
+            }, {
+              id: 2,
+              text: 'No'
+            }]
           },
           {
             id: 6,
@@ -133,7 +141,7 @@ export default {
   color: #2c3e50;
   margin: 0;
   overflow: hidden;
-  height: 800px;
+  height: 1280px;
   .tool-wrapper {
     position: relative;
   }

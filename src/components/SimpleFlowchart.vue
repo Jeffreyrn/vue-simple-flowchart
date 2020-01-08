@@ -115,10 +115,10 @@ export default {
         let x, y, cy, cx, ex, ey;
         x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
         y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
-        [cx, cy] = this.getPortPosition('bottom', x, y);
+        [cx, cy] = this.getPortPosition('right', x, y, fromNode.isStart);
         x = this.scene.centerX + (toNode.centeredX || toNode.x);
         y = this.scene.centerY + (toNode.centeredY || toNode.y);
-        [ex, ey] = this.getPortPosition('top', x, y);
+        [ex, ey] = this.getPortPosition('left', x, y, fromNode.isStart);
         return { 
           start: [cx, cy], 
           end: [ex, ey],
@@ -150,7 +150,13 @@ export default {
           return id === item.id
       })
     },
-    getPortPosition(type, x, y) {
+    getPortPosition(type, x, y, isStart) {
+      if (type === 'right') {
+        return [x + 250, isStart ? y + 100 : y + 70]
+      }
+      if (type === 'left') {
+        return [x, y + 70]
+      }
       if (type === 'top') {
         return [x + 40, y];
       }

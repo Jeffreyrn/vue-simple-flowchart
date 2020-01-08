@@ -4,15 +4,25 @@
     @mouseover="handleMouseOver"
     @mouseleave="handleMouseLeave"
     v-bind:class="{selected: options.selected === id}">
-    <div class="node-port node-input"
+    <div class="node-port node-input" :class="{ 'node-port-start': isStart }"
        @mousedown="inputMouseDown"
        @mouseup="inputMouseUp">
     </div>
     <div class="node-main">
+       <div v-if="isStart" class="node-start">
+        <span>Conversation Start</span>
+      </div>
       <div v-text="type" class="node-type"></div>
-      <div v-text="label" class="node-label"></div>
+      <div class="node-label">
+        <div class="node-label-title" v-text="label" />
+        <div v-if="buttons.length > 0" class="node-buttons">
+         <div v-for="(button, index) in buttons" :key="index" :id="'button_' + id + '_' + index" class="node-label-button">
+           <span>{{button.text}}</span>
+         </div>
+      </div>
+      </div>
     </div>
-    <div class="node-port node-output" 
+    <div class="node-port node-output" :class="{ 'node-port-start': isStart }"
       @mousedown="outputMouseDown"
       @mousemove="outputMouseMove"
       @mouseleave="outputMouseUp">
@@ -77,6 +87,18 @@ export default {
           centerY: 140,
         }
       }
+    },
+    isStart: {
+      type: Boolean,
+      default() {
+        return false;
+      }
+    },
+    buttons: {
+      type: Array,
+      default() {
+        return [];
+      }
     }
   },
   data() {
@@ -140,51 +162,90 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 $themeColor: rgb(255, 136, 85);
-$portSize: 12;
+$portSize: 16;
 
 .flowchart-node {
   margin: 0;
-  width: 80px;
-  height: 80px;
+  width: 250px;
   position: absolute;
   box-sizing: border-box;
   border: none;
-  background: white;
   z-index: 1;
   opacity: .9;
   cursor: move;
   transform-origin: top left;
   .node-main {
     text-align: center;
+    .node-start{
+      margin: 0 auto;
+      background: #e4392b;
+      padding: 6px;
+      width: 200px;
+      border-radius: 4px;
+      position: relative;
+      span{
+        color: #FFF;
+        font-size: 14px;
+        font-weight: 600;
+      }
+    }
     .node-type {
-      background: $themeColor;
-      color: white;
-      font-size: 13px;
+      background: #fff7e2;
+      border: 2px solid #fee196;
+      border-radius: 6px;
+      border-bottom-left-radius: 0px;
+      border-bottom-right-radius: 0px;
+      color: black;
+      font-size: 16px;
+      font-weight: 600;
       padding: 6px;
     }
     .node-label {
-      font-size: 13px;
+      font-size: 14px;
+      padding: 16px;
+      background: #FFF;
+      border: 2px solid #e0e6ed;
+
+      .node-label-title{
+        border-radius: 4px;
+        background: #DFDFDF;
+        padding: 10px;
+      }
+      .node-label-button{
+        border: 1px solid #dfdfdf;
+        border-radius: 4px;
+        background: #EFEFEF;
+        color: #0084ff;
+        padding: 10px;
+        font-weight: 600;
+      }
     }
   }
   .node-port {
     position: absolute;
     width: #{$portSize}px;
     height: #{$portSize}px;
-    left: 50%;
-    transform: translate(-50%);
+    top: 50%;
+    transform: translateY(-50%);
     border: 1px solid #ccc;
     border-radius: 100px;
-    background: white;
+    background: #8492a6;
+    opacity: 0.8;
     &:hover {
       background: $themeColor;
       border: 1px solid $themeColor;
     }
+    &.node-port-start {
+      margin-top: 30px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
   }
   .node-input {
-    top: #{-2+$portSize/-2}px;
+    left: #{-2+$portSize/-3}px;
   }
   .node-output {
-    bottom: #{-2+$portSize/-2}px;
+    right: #{-2+$portSize/-3}px;
   }
   .node-delete {
     position: absolute;
