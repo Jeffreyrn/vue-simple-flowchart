@@ -71,7 +71,7 @@ export default {
       return {
         stroke: '#8492a6',
         strokeWidth: 2.73205,
-        fill: 'none',
+        fill: 'none'
       }
     },
     arrowStyle() {

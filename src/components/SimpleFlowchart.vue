@@ -15,13 +15,6 @@
     @mousemove="handleMove" 
     @mouseup="handleUp"
     @mousedown="handleDown">
-    <svg width="100%" :height="`${height}px`">
-      <flowchart-link v-bind.sync="link" 
-        v-for="(link, index) in lines()" 
-        :key="`link${index}`"
-        @deleteLink="linkDelete(link.id)">
-      </flowchart-link>
-    </svg>
     <flowchart-node v-bind.sync="node" 
       v-for="(node, index) in scene.nodes" 
       :key="`node${index}`"
@@ -30,6 +23,13 @@
       @linkingStop="linkingStop(node.id)"
       @nodeSelected="nodeSelected(node.id, $event)">
     </flowchart-node>
+     <svg width="100%" :height="`${height}px`">
+      <flowchart-link v-bind.sync="link" 
+        v-for="(link, index) in lines()" 
+        :key="`link${index}`"
+        @deleteLink="linkDelete(link.id)">
+      </flowchart-link>
+    </svg>
   </div>
   <div class="dragging-node" v-if="moving" :style="{ top: `${draggingNodeTop}px`, left: `${draggingNodeLeft}px` }">
     <div class="dragging-node-title" />
@@ -119,8 +119,15 @@ export default {
         const fromNode = this.findNodeWithID(link.from)
         const toNode = this.findNodeWithID(link.to)
         let x, y, cy, cx, ex, ey;
-        x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
-        y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
+
+        // if link has source from button
+        if (link.button) {
+          x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
+          y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
+        } else {
+          x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
+          y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
+        }
         [cx, cy] = this.getPortPosition(fromNode.id, 'right', x, y);
         x = this.scene.centerX + (toNode.centeredX || toNode.x);
         y = this.scene.centerY + (toNode.centeredY || toNode.y);
@@ -406,6 +413,7 @@ export default {
   overflow: hidden;
   svg {
     cursor: grab;
+    position: relative;
   }
 }
 </style>

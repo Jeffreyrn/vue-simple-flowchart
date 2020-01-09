@@ -133,23 +133,23 @@ export default {
       const labelTitleElement = this.$refs.labelTitle;
       if (!labelTitleElement) { return; }
 
-      const nodeTypeHeight = nodeTypeElement.clientHeight;
-      const labelTitleHeight = labelTitleElement.clientHeight + 16;
+      const nodeTypeHeight = nodeTypeElement.offsetHeight;
+      const labelTitleHeight = labelTitleElement.offsetHeight;
 
       let buttonHeight = labelTitleHeight + nodeTypeHeight;
       for (let i = index; i >= 0; i--) {
         const element = document.getElementById('button_' + this.id + '_' + i);
         if(!element) { continue; }
         if(i === index) {
-          buttonHeight += element.clientHeight/1.5;
+          buttonHeight += element.offsetHeight/1.75;
         } else {
-          buttonHeight += element.clientHeight;
+          buttonHeight += element.offsetHeight;
         }
       }
 
       return {
         top: buttonHeight + 'px',
-        right: '10px'
+        right: '-8px'
       }
     },
     handleMousedown(e) {
@@ -201,10 +201,10 @@ $portSize: 16;
   position: absolute;
   box-sizing: border-box;
   border: none;
-  z-index: 1;
   opacity: .9;
   cursor: move;
   transform-origin: top left;
+  z-index: 1;
   .node-main {
     text-align: center;
     .node-start{
@@ -233,14 +233,13 @@ $portSize: 16;
     }
     .node-label {
       font-size: 14px;
-      padding: 16px;
       background: #FFF;
       border: 2px solid #e0e6ed;
 
       .node-label-title{
         border-radius: 4px;
-        background: #DFDFDF;
-        padding: 10px;
+        background: #FFF;
+        padding: 16px;
       }
       .node-label-button{
         border: 1px solid #dfdfdf;

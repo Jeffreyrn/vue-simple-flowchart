@@ -60,6 +60,24 @@ export default {
             }, {
               id: 3,
               text: "I don't know"
+            }, {
+              id: 3,
+              text: "I don't know"
+            }, {
+              id: 3,
+              text: "I don't know"
+            }, {
+              id: 3,
+              text: "I don't know"
+            }, {
+              id: 3,
+              text: "I don't know"
+            }, {
+              id: 3,
+              text: "I don't know"
+            }, {
+              id: 3,
+              text: "I don't know"
             }]
           },
           {
@@ -75,6 +93,12 @@ export default {
             id: 3,
             from: 2, // node id the link start
             to: 4,  // node id the link end
+          },
+          {
+            id: 5,
+            from: 4, // node id the link start
+            button: 1,
+            to: 6,  // node id the link end
           }
         ]
       },
