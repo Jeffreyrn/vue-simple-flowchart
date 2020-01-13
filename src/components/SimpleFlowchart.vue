@@ -19,7 +19,7 @@
       v-for="(node, index) in scene.nodes" 
       :key="`node${index}`"
       :options="nodeOptions"
-      @linkingStart="linkingStart(node.id)"
+      @linkingStart="linkingStart"
       @linkingStop="linkingStop(node.id)"
       @nodeSelected="nodeSelected(node.id, $event)">
     </flowchart-node>
@@ -128,10 +128,10 @@ export default {
           x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
           y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
         }
-        [cx, cy] = this.getPortPosition(fromNode.id, 'right', x, y);
+        [cx, cy] = this.getPortPosition(fromNode, 'right', x, y);
         x = this.scene.centerX + (toNode.centeredX || toNode.x);
         y = this.scene.centerY + (toNode.centeredY || toNode.y);
-        [ex, ey] = this.getPortPosition(toNode.id, 'left', x, y);
+        [ex, ey] = this.getPortPosition(toNode, 'left', x, y);
         return { 
           start: [cx, cy], 
           end: [ex, ey],
@@ -143,7 +143,7 @@ export default {
         const fromNode = this.findNodeWithID(this.draggingLink.from)
         x = this.scene.centerX + (fromNode.centeredX || fromNode.x);
         y = this.scene.centerY + (fromNode.centeredY || fromNode.y);
-        [cx, cy] = this.getPortPosition('bottom', x, y);
+        [cx, cy] = this.getPortPosition(fromNode, 'right', x, y);
         // push temp dragging link, mouse cursor postion = link end postion 
         lines.push({ 
           start: [cx, cy], 
@@ -157,31 +157,55 @@ export default {
           return id === item.id
       })
     },
-    getPortPosition(id, type, x, y) {
-      const labelElement = document.getElementById('node-main_' + id);
-
-      let labelHeight = 0;
+    getPortPosition(node, type, x, y) {
+      const id = node.id;
+      const nodeTypeElement = document.getElementById('node-type_' + id);
+      const labelElement = document.getElementById('label-title_' + id);
+      const nodeButtonsElement = document.getElementById('node-buttons_' + id);
+      let nodeTypeHeight = 0,
+          nodeTypeWidth = 0;
+      if (nodeTypeElement) {
+        nodeTypeHeight = nodeTypeElement.offsetHeight;
+        nodeTypeWidth = nodeTypeElement.offsetWidth;
+      }
+      let labelHeight = 0,
+          labelWidth = 0;
       if (labelElement) {
-        labelHeight = labelElement.clientHeight;
+        labelHeight = labelElement.offsetHeight;
+        labelWidth = labelElement.offsetWidth;
+      }
+      let buttonsHeight = 0,
+          buttonsWidth = 0;
+      if (nodeButtonsElement) {
+        buttonsHeight = nodeButtonsElement.offsetHeight;
+        buttonsWidth = nodeButtonsElement.offsetWidth;
+      }
+
+      // check if start node, then add margin top by 50px (manually)
+      let additionalHeight = 0
+      if(node.isStart) {
+        additionalHeight += 50;
       }
 
       if (type === 'right') {
-        return [x + 250, y + labelHeight/2 + 30]
+        return [x + labelWidth, (y + ((nodeTypeHeight + labelHeight + buttonsHeight)/2) + additionalHeight)];
       }
-      if (type === 'left') {
-        return [x, y + labelHeight/2]
+      else if (type === 'left') {
+        return [x, (y + ((nodeTypeHeight + labelHeight + buttonsHeight)/2) + additionalHeight)];
       }
-      if (type === 'top') {
+      else if (type === 'top') {
         return [x + 40, y];
       }
       else if (type === 'bottom') {
         return [x + 40, y + 80];
+      } else {
+        return [x, y]
       }
     },
-    linkingStart(index) {
+    linkingStart({id, index}) {
       this.action.linking = true;
       this.draggingLink = {
-        from: index,
+        from: id,
         mx: 0,
         my: 0,
       };

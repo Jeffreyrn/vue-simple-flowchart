@@ -9,28 +9,30 @@
        @mouseup="inputMouseUp">
     </div>
     <div :id="'node-main_' + id" class="node-main">
-       <div v-if="isStart" class="node-start">
+       <div v-if="isStart" :id="'node-main_' + id" class="node-start">
         <span>Conversation Start</span>
       </div>
       <div ref="nodeType" :id="'node-type_' + id" v-text="type" class="node-type"></div>
       <div class="node-label" :id="'label_' + id">
         <div ref="labelTitle" class="node-label-title" :id="'label-title_' + id" v-text="label" />
-        <div v-if="buttons.length > 0" class="node-buttons">
+        <div v-if="buttons.length > 0" class="node-buttons" :id="'node-buttons_' + id">
          <div v-for="(button, index) in buttons" :key="index" :id="'button_' + id + '_' + index" class="node-label-button">
            <span>{{button.text}}</span>
            <div class="node-port node-output" :id="'port_' + id + '_' + index" :class="{ 'node-port-start': isStart }" 
             :style="buttonPortStyle(index)"
             @mousedown="outputMouseDown"
-            @mousemove="outputMouseMove"
-            @mouseleave="outputMouseUp"></div>
+            @mousemove="outputMouseMove($event, id, index)"
+            @mouseleave="outputMouseUp"
+            @mouseup="outputMouseUp"></div>
          </div>
       </div>
       </div>
     </div>
     <div v-if="buttons.length === 0" :id="'node-output_' + id" class="node-port node-output" :class="{ 'node-port-start': isStart }"
       @mousedown="outputMouseDown"
-      @mousemove="outputMouseMove"
-      @mouseleave="outputMouseUp">
+      @mousemove="outputMouseMove($event, id)"
+      @mouseleave="outputMouseUp"
+      @mouseup="outputMouseUp">
     </div>
     <div v-show="show.delete" class="node-delete">&times;</div>
   </div>
@@ -170,9 +172,9 @@ export default {
       this.linkingStart = true;
       e.preventDefault();
     },
-    outputMouseMove(e) {
+    outputMouseMove(e, id, index) {
       if(this.linkingStart) {
-       this.$emit('linkingStart')
+       this.$emit('linkingStart', { id, index })
       }
     },
     outputMouseUp(e) {
