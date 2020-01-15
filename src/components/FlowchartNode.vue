@@ -3,11 +3,12 @@
     @mousedown="handleMousedown"
     @mouseover="handleMouseOver"
     @mouseleave="handleMouseLeave"
-    v-bind:class="{selected: options.selected === id}">
+    v-bind:class="{selected: options.selected === id}"
+  >
     <div class="node-port node-input" :class="{ 'node-port-start': isStart }"
-       @mousedown="inputMouseDown"
-       @mouseup="inputMouseUp">
-    </div>
+      @mousedown="inputMouseDown"
+      @mouseup="inputMouseUp"
+    ></div>
     <div :id="'node-main_' + id" class="node-main">
        <div v-if="isStart" :id="'node-main_' + id" class="node-start">
         <span>Conversation Start</span>
@@ -16,16 +17,17 @@
       <div class="node-label" :id="'label_' + id">
         <div ref="labelTitle" class="node-label-title" :id="'label-title_' + id" v-text="label" />
         <div v-if="buttons.length > 0" class="node-buttons" :id="'node-buttons_' + id">
-         <div v-for="(button, index) in buttons" :key="index" :id="'button_' + id + '_' + index" class="node-label-button">
-           <span>{{button.text}}</span>
-           <div class="node-port node-output" :id="'port_' + id + '_' + index" :class="{ 'node-port-start': isStart }" 
-            :style="buttonPortStyle(index)"
-            @mousedown="outputMouseDown"
-            @mousemove="outputMouseMove($event, id, index)"
-            @mouseleave="outputMouseUp"
-            @mouseup="outputMouseUp"></div>
-         </div>
-      </div>
+          <div v-for="(button, index) in buttons" :key="index" :id="'button_' + id + '_' + index" class="node-label-button">
+            <span>{{button.text}}</span>
+            <div class="node-port node-output" :id="'port_' + id + '_' + index" :class="{ 'node-port-start': isStart }" 
+              :style="buttonPortStyle(index)"
+              @mousedown="outputMouseDown"
+              @mousemove="outputMouseMoveFromButtonNode(index)"
+              @mouseup="outputMouseUp"
+              @mouseleave="outputMouseUp"
+            ></div>
+          </div>
+        </div>
       </div>
     </div>
     <div v-if="buttons.length === 0" :id="'node-output_' + id" class="node-port node-output" :class="{ 'node-port-start': isStart }"
@@ -156,7 +158,8 @@ export default {
     },
     handleMousedown(e) {
       const target = e.target || e.srcElement;
-      // console.log(target);
+      // // eslint-disable-next-line
+      // console.log({target});
       if (target.className.indexOf('node-input') < 0 && target.className.indexOf('node-output') < 0) {
         this.$emit('nodeSelected', e);
       }
@@ -172,9 +175,15 @@ export default {
       this.linkingStart = true;
       e.preventDefault();
     },
-    outputMouseMove(e, id, index) {
+    // eslint-disable-next-line
+    outputMouseMove(e) {
       if(this.linkingStart) {
-       this.$emit('linkingStart', { id, index })
+        this.$emit('linkingStart', { id, index })
+      }
+    },
+    outputMouseMoveFromButtonNode(buttonIndex) {
+      if(this.linkingStart) {
+        this.$emit('linkingStart', buttonIndex)
       }
     },
     outputMouseUp(e) {
@@ -268,7 +277,7 @@ $portSize: 16;
       border: 1px solid $themeColor;
     }
     &.node-port-start {
-      margin-top: 30px;
+      margin-top: 17px;
       top: 50%;
       transform: translateY(-50%);
     }

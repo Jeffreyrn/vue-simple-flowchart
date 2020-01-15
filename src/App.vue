@@ -23,6 +23,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import SimpleFlowchart from './components/SimpleFlowchart.vue'
 
 export default {
@@ -38,17 +39,17 @@ export default {
         scale: 1,
         nodes: [
           {
-            id: 2,
-            x: 300,
-            y: 100,
+            id: 1,
+            x: 10,
+            y: 10,
             type: 'Action',
             label: 'Hello, This is KR dev bot! How can I help you?',
             isStart: true
           },
           {
-            id: 4,
-            x: 450,
-            y: 300,
+            id: 2,
+            x: 300,
+            y: 100,
             type: 'Script',
             label: 'Do you have any symptoms described below such as cough, fever, etc?',
             buttons: [{
@@ -60,46 +61,48 @@ export default {
             }, {
               id: 3,
               text: "I don't know"
-            }, {
-              id: 3,
-              text: "I don't know"
-            }, {
-              id: 3,
-              text: "I don't know"
-            }, {
-              id: 3,
-              text: "I don't know"
-            }, {
-              id: 3,
-              text: "I don't know"
-            }, {
-              id: 3,
-              text: "I don't know"
-            }, {
-              id: 3,
-              text: "I don't know"
             }]
           },
           {
-            id: 6,
-            x: 300,
-            y: 400,
+            id: 3,
+            x: 600,
+            y: 100,
             type: 'Rule',
             label: 'test3',
+          },
+          {
+            id: 4,
+            x: 900,
+            y: 400,
+            type: 'Rule',
+            label: 'test4',
           }
         ],
         links: [
           {
-            id: 3,
-            from: 2, // node id the link start
-            to: 4,  // node id the link end
+            id: 5,
+            from: 1, // node id the link start
+            button: undefined,
+            to: 2,  // node id the link end
           },
           {
-            id: 5,
-            from: 4, // node id the link start
+            id: 6,
+            from: 2, // node id the link start
             button: 1,
-            to: 6,  // node id the link end
-          }
+            to: 3,  // node id the link end
+          },
+          {
+            id: 7,
+            from: 2, // node id the link start
+            button: 2,
+            to: 3,  // node id the link end
+          },
+          {
+            id: 8,
+            from: 3, // node id the link start
+            button: undefined,
+            to: 4,  // node id the link end
+          },
         ]
       },
       newNodeType: 0,
@@ -124,7 +127,7 @@ export default {
       }))
       this.scene.nodes.push({
         id: maxID + 1,
-        x: -400,
+        x: 0,
         y: 50,
         type: this.nodeCategory[this.newNodeType],
         label: this.newNodeLabel ? this.newNodeLabel: `test${maxID + 1}`,
