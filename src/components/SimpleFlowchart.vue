@@ -154,14 +154,32 @@ export default {
       })
     },
     getPortPosition(id, type, x, y, isStart, buttonId, fromNode) {
+      // const nodeTypeElement = document.getElementById('node-type_' + id);
       const labelElement = document.getElementById('node-main_' + id);
-
-      let labelHeight = 0;
-      let labelWidth = 0;
+      // const nodeButtonsElement = document.getElementById('node-buttons_' + id);
+      // let nodeTypeHeight = 0;
+          // nodeTypeWidth = 0;
+      // if (nodeTypeElement) {
+      //   nodeTypeHeight = nodeTypeElement.offsetHeight;
+        // nodeTypeWidth = nodeTypeElement.offsetWidth;
+      // }
+      let labelHeight = 0,
+          labelWidth = 0;
       if (labelElement) {
         labelHeight = labelElement.offsetHeight;
         labelWidth = labelElement.offsetWidth;
       }
+      // let buttonsHeight = 0;
+          // buttonsWidth = 0;
+      // if (nodeButtonsElement) {
+      //   buttonsHeight = nodeButtonsElement.offsetHeight;
+        // buttonsWidth = nodeButtonsElement.offsetWidth;
+      // }
+      // check if start node, then add margin top by 50px (manually)
+      // let additionalHeight = 0
+      // if(isStart) {
+      //   additionalHeight += 50;
+      // }
 
       if (type === 'right') {
         if (buttonId) {
@@ -182,8 +200,8 @@ export default {
           }
         }
       }
-      if (type === 'left') {
-        return [x, y + labelHeight/2]
+      else if (type === 'left') {
+        return [x, y +labelHeight/2];
       }
       // NOT USED YET =============================
       // if (type === 'top') {
