@@ -9,6 +9,11 @@
         <input type="text" v-model="newNodeLabel" placeholder="Input node label">
         <button @click="addNode">ADD</button>
       </div>
+      <button @click="isPanelShow = !isPanelShow">{{!isPanelShow ? 'Show Panel' : 'Hide Panel'}}</button>
+      <button v-if="isPanelShow" @click="isRawScene = !isRawScene">{{!isRawScene ? 'Show Raw' : 'Show Pretty'}}</button>
+      <div v-if="isPanelShow" class="panel-area">
+        <div v-html="isRawScene ? rawScene : prettyScene" class="extraction-panel" />
+      </div>
     </div>
     
     <simple-flowchart :scene.sync="scene" 
@@ -33,6 +38,8 @@ export default {
   },
   data() {
     return {
+      isRawScene: false,
+      isPanelShow: false,
       scene: {
         centerX: 0,
         centerY: 0,
@@ -103,6 +110,12 @@ export default {
             button: undefined,
             to: 4,  // node id the link end
           },
+          {
+            id: 9,
+            from: 4, // node id the link start
+            button: undefined,
+            to: 1,  // node id the link end
+          },
         ]
       },
       newNodeType: 0,
@@ -115,6 +128,14 @@ export default {
         'fork',
         'join',
       ],
+    }
+  },
+  computed: {
+    prettyScene() {
+      return JSON.stringify(this.scene, null, '\t').replace(/\n/gi, '<br />').replace(/\t/gi, '&nbsp;&nbsp;')
+    },
+    rawScene() {
+      return JSON.stringify(this.scene);
     }
   },
   methods: {
@@ -174,6 +195,22 @@ export default {
   height: 1280px;
   .tool-wrapper {
     position: relative;
+  }
+  .panel-area {
+    display: flex;
+    flex-grow: 1;
+    justify-content: center; 
+  }
+  .extraction-panel {
+    text-align: left;
+    width: 60%;
+    max-height: 300px;
+    border-width: 3px;
+    border-style: solid;
+    padding: 10px;
+    border-color: grey;
+    border-radius: 10px;
+    overflow: scroll;
   }
 }
 </style>

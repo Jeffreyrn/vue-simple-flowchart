@@ -32,7 +32,7 @@
     </div>
     <div v-if="buttons.length === 0" :id="'node-output_' + id" class="node-port node-output" :class="{ 'node-port-start': isStart }"
       @mousedown="outputMouseDown"
-      @mousemove="outputMouseMove($event, id)"
+      @mousemove="outputMouseMove"
       @mouseleave="outputMouseUp"
       @mouseup="outputMouseUp">
     </div>
@@ -158,8 +158,6 @@ export default {
     },
     handleMousedown(e) {
       const target = e.target || e.srcElement;
-      // // eslint-disable-next-line
-      // console.log({target});
       if (target.className.indexOf('node-input') < 0 && target.className.indexOf('node-output') < 0) {
         this.$emit('nodeSelected', e);
       }
@@ -178,7 +176,7 @@ export default {
     // eslint-disable-next-line
     outputMouseMove(e) {
       if(this.linkingStart) {
-        this.$emit('linkingStart', { id, index })
+        this.$emit('linkingStart')
       }
     },
     outputMouseMoveFromButtonNode(buttonIndex) {
